@@ -92,7 +92,27 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        queue = Queue()
+        visited = set()
+
+        queue.enqueue([starting_vertex])
+
+        while queue.size() > 0:
+            path = queue.dequeue()
+            lastVertex = path[len(path) - 1]
+
+            if lastVertex not in visited:
+                if lastVertex == destination_vertex:
+                    return path
+                visited.add(lastVertex)
+
+                for neighbor in self.vertices[lastVertex]:
+
+                    pathCopy = path.copy()
+                    pathCopy.append(neighbor)
+                    queue.enqueue(pathCopy)
+
+        return None
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -100,7 +120,29 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        stack = Stack()
+        visited = set()
+        result = []
+
+        stack.push([starting_vertex])
+
+        while stack.size() > 0:
+            path = stack.pop()
+            lastVertex = path[len(path) - 1]
+            if lastVertex == destination_vertex:
+                print(stack.size())
+                result.append(path)
+
+            if lastVertex not in visited:
+                visited.add(lastVertex)
+                for neighbor in self.vertices[lastVertex]:
+                    pathCopy = path.copy()
+                    pathCopy.append(neighbor)
+                    stack.push(pathCopy)
+
+        if len(result) > 0:
+            return result
+        return None
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
         """
@@ -110,7 +152,6 @@ class Graph:
 
         This should be done using recursion.
         """
-        pass  # TODO
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
@@ -164,7 +205,7 @@ if __name__ == '__main__':
         1, 2, 4, 6, 3, 5, 7
     '''
     graph.dft(1)
-
+    print('\n')
     graph.dft_recursive(1)
 
     '''

@@ -41,11 +41,12 @@ class Graph:
             u = queue.dequeue()
 
             if u not in visited:
+                print(u)
                 visited.append(u)
                 for neighbor in self.vertices[u]:
                     queue.enqueue(neighbor)
             
-        print(visited)
+
 
     def dft(self, starting_vertex):
         """
@@ -62,10 +63,10 @@ class Graph:
 
             if s not in visited:
                 visited.append(s)
+                print(s)
                 for neighbor in self.vertices[s]:
                     stack.push(neighbor)
             
-        print(visited)
 
     def dft_recursive(self, starting_vertex):
         """
@@ -74,7 +75,16 @@ class Graph:
 
         This should be done using recursion.
         """
-        pass  # TODO
+        visited = set()
+
+        def DFT(vertex):
+            if vertex not in visited:
+                visited.add(vertex)
+                print(vertex)
+                for next_neighbor in self.vertices[vertex]:
+                    DFT(next_neighbor)
+
+        DFT(starting_vertex)
 
     def bfs(self, starting_vertex, destination_vertex):
         """
@@ -154,6 +164,7 @@ if __name__ == '__main__':
         1, 2, 4, 6, 3, 5, 7
     '''
     graph.dft(1)
+
     graph.dft_recursive(1)
 
     '''

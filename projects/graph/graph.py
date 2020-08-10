@@ -3,9 +3,11 @@ Simple graph implementation
 """
 from util import Stack, Queue  # These may come in handy
 
+
 class Graph:
 
     """Represent a graph as a dictionary of vertices mapping labels to edges."""
+
     def __init__(self):
         self.vertices = {}
 
@@ -45,8 +47,6 @@ class Graph:
                 visited.append(u)
                 for neighbor in self.vertices[u]:
                     queue.enqueue(neighbor)
-            
-
 
     def dft(self, starting_vertex):
         """
@@ -66,7 +66,6 @@ class Graph:
                 print(s)
                 for neighbor in self.vertices[s]:
                     stack.push(neighbor)
-            
 
     def dft_recursive(self, starting_vertex):
         """
@@ -130,7 +129,6 @@ class Graph:
             path = stack.pop()
             lastVertex = path[len(path) - 1]
             if lastVertex == destination_vertex:
-                print(stack.size())
                 result.append(path)
 
             if lastVertex not in visited:
@@ -152,6 +150,31 @@ class Graph:
 
         This should be done using recursion.
         """
+
+        visited = set()
+        result = []
+        path = []
+
+        def DFT(vertex, visited, path):
+            pathCopy = path.copy()
+            visitedCopy = visited.copy()
+
+            if vertex not in visitedCopy:
+                visitedCopy.add(vertex)
+                pathCopy.append(vertex)
+                if len(pathCopy) > 0:
+                    if pathCopy[len(pathCopy) - 1] == destination_vertex:
+                        result.append(pathCopy)
+
+                for next_neighbor in self.vertices[vertex]:
+                    DFT(next_neighbor, visitedCopy, pathCopy)
+
+        DFT(starting_vertex, visited, path)
+
+        if len(result) > 0:
+            return result
+        return None
+
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph

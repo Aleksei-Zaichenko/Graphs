@@ -57,3 +57,19 @@ class Room:
             return None
     def get_coords(self):
         return [self.x, self.y]
+
+
+class hotDog:
+    x = 2
+
+    def __init__(self,num = 0):
+        self.num = num
+    
+    def sound(self):
+        return f"x is {self.x} and num is {self.num}"
+
+first = hotDog(1)
+second = hotDog(2)
+
+print(first.sound())
+print(second.sound())

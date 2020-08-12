@@ -15,13 +15,17 @@ class Graph:
         """
         Add a vertex to the graph.
         """
-        self.vertices[vertex_id] = set()
+        if vertex_id not in self.vertices:
+            self.vertices[vertex_id] = set()
 
     def add_edge(self, v1, v2):
         """
         Add a directed edge to the graph.
         """
-        self.vertices[v1].add(v2)
+        if v1 in self.vertices and v2 in self.vertices:
+            self.vertices[v1].add(v2)
+        else:
+            raise IndexError("That vertex does not exist!")
 
     def get_neighbors(self, vertex_id):
         """
@@ -150,7 +154,7 @@ class Graph:
 
         visited = set()
 
-        def DFT(vertex,path = []):
+        def DFT(vertex, path=[]):
             if vertex not in visited:
                 visited.add(vertex)
                 path.append(vertex)
@@ -158,14 +162,14 @@ class Graph:
                     return path
 
                 for next_neighbor in self.get_neighbors(vertex):
-                        if next_neighbor not in visited:
-                            pathCopy = path.copy()
-                            newPath = DFT(next_neighbor,pathCopy)
-                            if newPath:
-                                return newPath
+                    if next_neighbor not in visited:
+                        pathCopy = path.copy()
+                        newPath = DFT(next_neighbor, pathCopy)
+                        if newPath:
+                            return newPath
 
-            
         return DFT(starting_vertex)
+
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph

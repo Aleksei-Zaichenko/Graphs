@@ -15,13 +15,17 @@ class Graph:
         """
         Add a vertex to the graph.
         """
-        self.vertices[vertex_id] = set()
+        if vertex_id not in self.vertices:
+            self.vertices[vertex_id] = set()
 
     def add_edge(self, v1, v2):
         """
         Add a directed edge to the graph.
         """
-        self.vertices[v1].add(v2)
+        if v1 in self.vertices and v2 in self.vertices:
+            self.vertices[v1].add(v2)
+        else:
+            raise IndexError("That vertex does not exist!")
 
     def get_neighbors(self, vertex_id):
         """
@@ -34,7 +38,7 @@ class Graph:
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
-        visited = []
+        visited = set()
         queue = Queue()
 
         queue.enqueue(starting_vertex)
@@ -44,7 +48,7 @@ class Graph:
 
             if u not in visited:
                 print(u)
-                visited.append(u)
+                visited.add(u)
                 for neighbor in self.vertices[u]:
                     queue.enqueue(neighbor)
 
@@ -121,25 +125,22 @@ class Graph:
         """
         stack = Stack()
         visited = set()
-        result = []
 
         stack.push([starting_vertex])
 
         while stack.size() > 0:
             path = stack.pop()
             lastVertex = path[len(path) - 1]
-            if lastVertex == destination_vertex:
-                result.append(path)
 
             if lastVertex not in visited:
+                if lastVertex == destination_vertex:
+                    return path
                 visited.add(lastVertex)
                 for neighbor in self.vertices[lastVertex]:
                     pathCopy = path.copy()
                     pathCopy.append(neighbor)
                     stack.push(pathCopy)
 
-        if len(result) > 0:
-            return result
         return None
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
@@ -152,28 +153,22 @@ class Graph:
         """
 
         visited = set()
-        result = []
-        path = []
 
-        def DFT(vertex, visited, path):
-            pathCopy = path.copy()
-            visitedCopy = visited.copy()
+        def DFT(vertex, path=[]):
+            if vertex not in visited:
+                visited.add(vertex)
+                path.append(vertex)
+                if path[len(path) - 1] == destination_vertex:
+                    return path
 
-            if vertex not in visitedCopy:
-                visitedCopy.add(vertex)
-                pathCopy.append(vertex)
-                if len(pathCopy) > 0:
-                    if pathCopy[len(pathCopy) - 1] == destination_vertex:
-                        result.append(pathCopy)
+                for next_neighbor in self.get_neighbors(vertex):
+                    if next_neighbor not in visited:
+                        pathCopy = path.copy()
+                        newPath = DFT(next_neighbor, pathCopy)
+                        if newPath:
+                            return newPath
 
-                for next_neighbor in self.vertices[vertex]:
-                    DFT(next_neighbor, visitedCopy, pathCopy)
-
-        DFT(starting_vertex, visited, path)
-
-        if len(result) > 0:
-            return result
-        return None
+        return DFT(starting_vertex)
 
 
 if __name__ == '__main__':
